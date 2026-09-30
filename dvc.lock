@@ -1,0 +1,92 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+    - path: src/prepare.py
+      hash: md5
+      md5: 6721d2559901f8b03886d0f96ceaec50
+      size: 549
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: ce8685a23dfdb9d880edfa3a578e7adc.dir
+      size: 30869925
+      nfiles: 1
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: ce8685a23dfdb9d880edfa3a578e7adc.dir
+      size: 30869925
+      nfiles: 1
+    - path: src/preprocess.py
+      hash: md5
+      md5: fe4913c18ccb6cd0f594570fa402d784
+      size: 1025
+    params:
+      params.yaml:
+        preprocess.seed: 42
+        preprocess.val_size: 0.1
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: fa463365792af3175a998d014006c77d.dir
+      size: 45395143
+      nfiles: 1
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: fa463365792af3175a998d014006c77d.dir
+      size: 45395143
+      nfiles: 1
+    - path: src/train.py
+      hash: md5
+      md5: 12c40fb318ea66f90613855bf6f42b9f
+      size: 1295
+    params:
+      params.yaml:
+        train:
+          dense_units: 128
+          dropout_rate: 0.2
+          learning_rate: 0.001
+          epochs: 15
+          batch_size: 128
+          seed: 42
+    outs:
+    - path: models/history.csv
+      hash: md5
+      md5: 32b5684a00f9babe67f33e2b1de0fb94
+      size: 1240
+    - path: models/model.h5
+      hash: md5
+      md5: 8650fb6e5c6831b6011dc7676f907b46
+      size: 1245272
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: fa463365792af3175a998d014006c77d.dir
+      size: 45395143
+      nfiles: 1
+    - path: models/model.h5
+      hash: md5
+      md5: 8650fb6e5c6831b6011dc7676f907b46
+      size: 1245272
+    - path: src/evaluate.py
+      hash: md5
+      md5: d73bbfc4b00a5c7e8072964d2e431048
+      size: 1300
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: 6616fa190b6ca32587d5c35d9c345071
+      size: 79
+    - path: reports/confusion_matrix.png
+      hash: md5
+      md5: 59bb4d7d7f2b6e958441429dd0704fb9
+      size: 72902
