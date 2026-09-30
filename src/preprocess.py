@@ -11,8 +11,8 @@ def main():
         p = yaml.safe_load(f)["preprocess"]
 
     raw = np.load("data/raw/fashion_mnist_raw.npz")
-    x_train = raw["x_train"].astype("float32") / 255.0   # normalization step
-    x_test = raw["x_test"].astype("float32") / 255.0
+    x_train = (raw["x_train"].astype("float32") - 127.5) / 127.5   # normalization step (teammate: [-1, 1])
+    x_test = (raw["x_test"].astype("float32") - 127.5) / 127.5
     y_train, y_test = raw["y_train"], raw["y_test"]
 
     x_tr, x_val, y_tr, y_val = train_test_split(
