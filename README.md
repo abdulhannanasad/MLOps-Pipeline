@@ -1,6 +1,6 @@
 # fashion-ann-pipeline
 
-Fully-connected ANN on Fashon-MNIST, versioned with Git + DVC (Google Drive remote).
+Fully-connected ANN on Fashion-MNIST, versioned with Git + DVC (Google Drive remote).
 
 ```
 pip install tensorflow dvc "dvc[gdrive]" pyyaml scikit-learn matplotlib
